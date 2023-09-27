@@ -1,10 +1,12 @@
 # Created by https://www.toptal.com/developers/gitignore/api/terraform
 # Edit at https://www.toptal.com/developers/gitignore?templates=terraform
 
+/.key
+.DS_Store
+
 ### Terraform ###
 # Local .terraform directories
 **/.terraform/*
-**.key/**
 
 # .tfstate files
 *.tfstate
