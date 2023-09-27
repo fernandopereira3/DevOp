@@ -1,0 +1,26 @@
+- name: Install NodeJS
+  hosts: dev
+  remote_user: ubuntu
+
+  tasks:
+  - name: Instalar NodeJS
+    apt:
+    # update_cache: yes
+      pkg:
+        - python3
+    become: yes
+    become_method: sudo
+
+
+
+
+
+
+        # ansible.builtin.apt:
+        #       update_cache: true 
+        #       name: nodejs
+        #       state: latest
+        #       update_cache: yes
+        #       become: yes 
+        #       become_method: sudo
+
