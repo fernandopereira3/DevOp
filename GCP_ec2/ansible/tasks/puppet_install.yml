@@ -1,0 +1,30 @@
+- name: install the puppet deb from a remote repo
+  apt:
+    name: https://apt.puppet.com/puppet8-release-bullseye.deb
+    state: present
+
+- name: Set puppetlabs.repo's puppetlabs-devel section enabled to 1
+  ini_file:
+    path: /etc/apt/source.list
+    section: puppetlabs-devel
+    option: enabled
+    value: 1
+    create: no
+    backup: no
+
+- name: Install puppet
+  apt:
+    name: "Install puppet"
+  with_items:
+    - puppetserver
+    - puppet
+
+- name: Start puppet
+  systemd:
+    name: puppet
+    state: started
+
+- name: Enable puppet
+  systemd:
+    name: puppet
+    enabled: yes

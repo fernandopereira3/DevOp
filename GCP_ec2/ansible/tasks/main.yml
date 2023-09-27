@@ -1,0 +1,10 @@
+- import_tasks: puppet_install.yml
+
+- import_tasks: puppet_test.yml
+
+vars:
+      gcp_project: projetobase-399518
+      gcp_cred_kind: serviceaccount
+      gcp_cred_file: /home/IAC/GCP_ec2/key.json
+      zone: "us-central1"
+      region: "us-central1-c"

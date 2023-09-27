@@ -1,0 +1,12 @@
+- name: Store puppet test file
+  copy:
+    src: site.pp
+    dest: /tmp/site.pp
+
+- name: Run puppet test
+  shell: puppet apply /tmp/site.pp
+
+- name: Confirm group creation
+  group:
+    name: gPuppet
+    state: present

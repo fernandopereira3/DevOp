@@ -1,0 +1,15 @@
+- name: Install Puppet
+  hosts: tag_srv_tag_os_rhel74
+  gather_facts: false
+  become: true
+
+  vars:
+      gcp_project: projetobase-399518
+      gcp_cred_kind: serviceaccount
+      gcp_cred_file: /home/IAC/GCP_ec2/key.json
+      zone: "us-central1"
+      region: "us-central1-c"
+
+  tasks:
+    - import_role:
+       name: main
