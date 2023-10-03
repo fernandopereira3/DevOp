@@ -29,25 +29,27 @@ resource "aws_key_pair" "Dev" {
 
 ### SERVIDOR PROD
 
-resource "aws_instance" "servidorPROD" {
-  ami           = var.ami
+resource "aws_launch_template" "template_ex" {
+  image_id = var.ami
   instance_type = var.instance
-  key_name      = var.key
-  tags          = { Name = "Servidor de Producao" }
+  key_name = var.key
+  tags = { Name = "Terraform Python"} 
+  security_group_names = [ var.securityGroup ]
+  user_data = filebase64("installansible.sh")
+}
 
+resource "aws_autoscaling_group" "grupoescalar" {
+  availability_zones = [ "${var.regiao}a" ]
+  name = var.nomeGrupo
+  max_size = var.maximo
+  min_size = var.minimo
+  launch_template {
+    id = aws_launch_template.template_ex.id
+    version = "$Latest"
+  }
 }
 
 resource "aws_key_pair" "Prod" {
   key_name   = var.key
   public_key = file("/Users/fernando/devop/iac/.key/Prod.pub")
-}
-
-##### OUTPUTS
-
-output "IP_PRODUCAO" {
-  value = aws_instance.servidorPROD.public_ip
-}
-
-output "IP_DEV" {
-  value = aws_instance.servidorDEV.public_ip
 }

@@ -1,8 +1,12 @@
 module "aws_producao" {
   source = "../Infra"
-  ami = "ami-0c65adc9a5c1b5d7c" # ububtu 20.04
+  ami = "ami-069a9077d702fe1d8" # Suse 15
   instance = "t2.micro"
   key = "Prod"
+  securityGroup = "Prod"
+  minimo = 1
+  maximo = 10
+  nomeGrupo = "Prod"
 }
 
 # ### SERVIDOR PROD
