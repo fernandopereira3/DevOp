@@ -47,7 +47,47 @@ resource "aws_autoscaling_group" "grupoescalar" {
     id = aws_launch_template.template_ex.id
     version = "$Latest"
   }
+  target_group_arns = [ aws_lb_target_group.alvoLoad.arn ]
 }
+
+################
+
+resource "aws_default_subnet" "subnet_1" {
+  availability_zone = "${var.regiao}a"
+}
+
+resource "aws_default_subnet" "subnet_2" {
+  availability_zone = "${var.regiao}b"
+}
+
+resource "aws_lb" "loadbalance" {
+  internal = false
+  subnets = [ aws_default_subnet.subnet_1.id, aws_default_subnet.subnet_2.id ]
+  
+}
+
+resource "aws_lb_target_group" "alvoLoad" {
+  name = "maquinaAlvo"
+  port = "8000"
+  protocol = "HTTPS"
+  vpc_id = aws_default_vpc.default.id
+}
+
+resource "aws_default_vpc" "default" {
+  
+}
+
+resource "aws_lb_listener" "entradaLB" {
+  load_balancer_arn = aws_lb.loadbalance.arn
+  port = 8000
+  protocol = "HTTPS"
+  default_action {
+    type = "forward"
+    target_group_arn = aws_lb_target_group.alvoLoad.arn
+  }
+}
+
+#####################
 
 resource "aws_key_pair" "Prod" {
   key_name   = var.key
