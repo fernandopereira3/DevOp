@@ -15,17 +15,17 @@ provider "aws" {
 }
 
 #### servidor DEV
-resource "aws_instance" "servidorDEV" {
-  ami           = var.ami
-  instance_type = var.instance
-  key_name      = var.key
-  tags          = { Name = "Servidor Dev" }
-}
+# resource "aws_instance" "servidorDEV" {
+#   ami           = var.ami
+#   instance_type = var.instance
+#   key_name      = var.key
+#   tags          = { Name = "Servidor Dev" }
+# }
 
-resource "aws_key_pair" "Dev" {
-  key_name   = var.key
-  public_key = file("/Users/fernando/devop/iac/.key/Dev.pub")
-}
+# resource "aws_key_pair" "Dev" {
+#   key_name   = var.key
+#   public_key = file("/Users/fernando/devop/iac/.key/Dev.pub")
+# }
 
 ### SERVIDOR PROD
 
@@ -69,7 +69,7 @@ resource "aws_lb" "loadbalance" {
 resource "aws_lb_target_group" "alvoLoad" {
   name = "maquinaAlvo"
   port = "8000"
-  protocol = "HTTPS"
+  protocol = "HTTP"
   vpc_id = aws_default_vpc.default.id
 }
 
@@ -80,7 +80,7 @@ resource "aws_default_vpc" "default" {
 resource "aws_lb_listener" "entradaLB" {
   load_balancer_arn = aws_lb.loadbalance.arn
   port = 8000
-  protocol = "HTTPS"
+  protocol = "HTTP"
   default_action {
     type = "forward"
     target_group_arn = aws_lb_target_group.alvoLoad.arn
