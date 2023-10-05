@@ -11,7 +11,7 @@ terraform {
 
 provider "aws" {
   profile = "default"
-  region  = var.regiao
+  region  = "us-west-2"
 }
 
 #### servidor DEV
@@ -30,7 +30,7 @@ provider "aws" {
 ### SERVIDOR PROD
 
 resource "aws_launch_template" "template_ex" {
-  image_id = var.ami
+  image_id = "ami-03f65b8614a860c29"
   instance_type = var.instance
   key_name = var.key
   tags = { Name = "Terraform Python"} 
@@ -89,6 +89,20 @@ resource "aws_lb_listener" "entradaLB" {
 
 #####################
 
+resource "aws_autoscaling_policy" "autoProducao" {
+  name = "escala-terraform"
+  autoscaling_group_name = var.nomeGrupo
+  policy_type = "TargetTrackingScaling"
+  target_tracking_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ASGAverageCPUUtilization"
+    }
+    target_value = 50.0
+  }
+
+}
+
+#####################
 resource "aws_key_pair" "Prod" {
   key_name   = var.key
   public_key = file("/Users/fernando/devop/iac/.key/Prod.pub")

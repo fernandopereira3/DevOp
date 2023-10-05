@@ -1,7 +1,8 @@
 module "aws_producao" {
   source = "../Infra"
-  ami = "ami-069a9077d702fe1d8" # Suse 15
+  ami = "ami-03f65b8614a860c29 " # Ubuntu 22.04
   instance = "t2.micro"
+  regiao = "us-west-2"
   key = "Prod"
   securityGroup = "Prod"
   minimo = 1
