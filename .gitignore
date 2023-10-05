@@ -1,6 +1,6 @@
 # Created by https://www.toptal.com/developers/gitignore/api/terraform
 # Edit at https://www.toptal.com/developers/gitignore?templates=terraform
-
+# é cada uma que tem que aguentar 
 /.key***
 .DS_Store
 *__pycache__*
