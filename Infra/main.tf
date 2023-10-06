@@ -14,28 +14,13 @@ provider "aws" {
   region  = "us-west-2"
 }
 
-#### servidor DEV
-# resource "aws_instance" "servidorDEV" {
-#   ami           = var.ami
-#   instance_type = var.instance
-#   key_name      = var.key
-#   tags          = { Name = "Servidor Dev" }
-# }
-
-# resource "aws_key_pair" "Dev" {
-#   key_name   = var.key
-#   public_key = file("/Users/fernando/devop/iac/.key/Dev.pub")
-# }
-
-### SERVIDOR PROD
-
 resource "aws_launch_template" "template_ex" {
   image_id = "ami-03f65b8614a860c29"
   instance_type = var.instance
   key_name = var.key
-  tags = { Name = "Terraform Python"} 
+  tags = { Name = "Terraform NODEJS"} 
   security_group_names = [ var.securityGroup ]
-  user_data = filebase64("installansible.sh")
+  user_data = var.producao ? filebase64("installansible.sh") : ""
 }
 
 resource "aws_autoscaling_group" "grupoescalar" {
@@ -43,11 +28,11 @@ resource "aws_autoscaling_group" "grupoescalar" {
   name = var.nomeGrupo
   max_size = var.maximo
   min_size = var.minimo
+  target_group_arns = var.producao ? [ aws_lb_target_group.alvoLoad[0].arn ] : []
   launch_template {
     id = aws_launch_template.template_ex.id
     version = "$Latest"
   }
-  target_group_arns = [ aws_lb_target_group.alvoLoad.arn ]
 }
 
 ################
@@ -63,6 +48,7 @@ resource "aws_default_subnet" "subnet_2" {
 resource "aws_lb" "loadbalance" {
   internal = false
   subnets = [ aws_default_subnet.subnet_1.id, aws_default_subnet.subnet_2.id ]
+  count = var.producao ? 1 : 0 
   
 }
 
@@ -71,6 +57,7 @@ resource "aws_lb_target_group" "alvoLoad" {
   port = "8000"
   protocol = "HTTP"
   vpc_id = aws_default_vpc.default.id
+  count = var.producao ? 1 : 0 
 }
 
 resource "aws_default_vpc" "default" {
@@ -78,13 +65,14 @@ resource "aws_default_vpc" "default" {
 }
 
 resource "aws_lb_listener" "entradaLB" {
-  load_balancer_arn = aws_lb.loadbalance.arn
+  load_balancer_arn = aws_lb.loadbalance[0].arn
   port = 8000
   protocol = "HTTP"
   default_action {
     type = "forward"
-    target_group_arn = aws_lb_target_group.alvoLoad.arn
+    target_group_arn = aws_lb_target_group.alvoLoad[0].arn
   }
+  count = var.producao ? 1 : 0 
 }
 
 #####################
@@ -99,7 +87,7 @@ resource "aws_autoscaling_policy" "autoProducao" {
     }
     target_value = 50.0
   }
-
+  count = var.producao ? 1 : 0 
 }
 
 #####################

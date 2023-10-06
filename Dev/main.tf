@@ -1,12 +1,14 @@
 module "aws_desenvolvedor" {
     source = "../Infra"
     ami = "ami-069a9077d702fe1d8" #suse 15
+    regiao = "us-west-2"
     instance = "t1.micro"
     key = "Dev"
     securityGroup = "Dev"
     minimo = 0
     maximo = 4
     nomeGrupo = "Dev"
+    producao = false
 }
 
 # #### servidor DEV

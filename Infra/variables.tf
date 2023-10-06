@@ -30,3 +30,7 @@ variable "maximo" {
 variable "nomeGrupo" {
   type = string
 }
+
+variable "producao" {
+  type = bool
+}
