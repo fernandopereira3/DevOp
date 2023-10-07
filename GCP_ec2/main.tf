@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "google" {
-  credentials = file("key.json")
+  credentials = file("/home/.keys/key.json")
   project     = "projetobase-399518"
   region      = "us-central1"
   zone        = "us-central1-c"
