@@ -95,3 +95,5 @@ resource "aws_key_pair" "Prod" {
   key_name   = var.key
   public_key = file("/Users/fernando/devop/iac/.key/Prod.pub")
 }
+
+##### mudanca 10-10
