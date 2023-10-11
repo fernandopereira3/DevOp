@@ -96,5 +96,4 @@ resource "aws_key_pair" "Prod" {
   public_key = file("/Users/fernando/devop/iac/.key/Prod.pub")
 }
 
-##### mudanca 10-10 #####
 ##### atualizacao de repositorio ####
